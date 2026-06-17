@@ -97,8 +97,21 @@ body {
   will-change:transform;
 }
 .bg-blob.active { opacity:0.22; }
-#blob1 { width:60vw; height:60vw; top:-10%; left:-10%; animation:blobMove1 18s ease-in-out infinite; }
-#blob2 { width:55vw; height:55vw; bottom:-10%; right:-10%; animation:blobMove2 22s ease-in-out infinite; }
+/* ✅ CORRECTION 1 : agrandissement des blobs pour couvrir tout l'écran */
+#blob1 {
+  width: 120vw;
+  height: 120vh;
+  top: -30%;
+  left: -30%;
+  animation: blobMove1 18s ease-in-out infinite;
+}
+#blob2 {
+  width: 120vw;
+  height: 120vh;
+  bottom: -30%;
+  right: -30%;
+  animation: blobMove2 22s ease-in-out infinite;
+}
 @keyframes blobMove1 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(8vw,6vh) scale(1.1)} 66%{transform:translate(-4vw,10vh) scale(0.9)} }
 @keyframes blobMove2 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(-8vw,-6vh) scale(0.9)} 66%{transform:translate(5vw,-10vh) scale(1.1)} }
 
@@ -1016,7 +1029,7 @@ body {
    ════════════════════════════════════════════════════════════ */
 /* Floating glass pill that slides between tabs */
 .lg-bubble {
-  position:absolute; z-index:0; pointer-events:none;  /* ← z-index corrigé de -1 à 0 */
+  position:absolute; z-index:0; pointer-events:none;
   border-radius:999px;
   background:linear-gradient(135deg,rgba(255,255,255,0.18),rgba(255,255,255,0.04));
   backdrop-filter:blur(24px) saturate(200%);
@@ -1954,10 +1967,13 @@ function updatePlayerUI() {
   // Fav
   updateFavBtn(t);
 
-  // Colors
+  // Colors — correction crossOrigin pour iOS
   if (artURL) {
     const img = new Image();
-    img.crossOrigin='anonymous';
+    // Ne pas définir crossOrigin pour les blob: URLs (sinon iOS bloque)
+    if (!artURL.startsWith('blob:')) {
+      img.crossOrigin = 'anonymous';
+    }
     img.onload = () => extractAndApplyColors(img);
     img.src = artURL;
   } else {
@@ -1982,7 +1998,6 @@ function updatePlayerUI() {
 
   updatePlayIcons();
   updateArtState();
-  // Trigger lyrics sync if lyrics tab is open
   if ($('fp-lyrics').classList.contains('open')) renderLyrics();
 }
 
