@@ -93,7 +93,7 @@ body {
   border-radius:50%;
   filter:blur(80px);
   opacity:0;
-  transition:opacity 2s ease, width 2s ease, height 2s ease, transform 2s ease;  /* background transition retirée */
+  transition:opacity 2s ease, width 2s ease, height 2s ease, transform 2s ease, background 2s ease;
   will-change:transform;
 }
 .bg-blob.active { opacity:0.22; }
@@ -440,8 +440,8 @@ body {
   background:radial-gradient(ellipse at 30% 25%, var(--c1) 0%, transparent 55%),
               radial-gradient(ellipse at 70% 75%, var(--c2) 0%, transparent 55%);
   opacity:0.55; filter:blur(70px);
+  transition:background 1.4s ease;
   will-change:background;
-  /* transition:background 1.4s ease;   <-- retirée pour éviter le résidu iOS */
 }
 
 #fp-inner {
@@ -1016,7 +1016,7 @@ body {
    ════════════════════════════════════════════════════════════ */
 /* Floating glass pill that slides between tabs */
 .lg-bubble {
-  position:absolute; z-index:-1; pointer-events:none;
+  position:absolute; z-index:0; pointer-events:none;  /* ← z-index corrigé de -1 à 0 */
   border-radius:999px;
   background:linear-gradient(135deg,rgba(255,255,255,0.18),rgba(255,255,255,0.04));
   backdrop-filter:blur(24px) saturate(200%);
